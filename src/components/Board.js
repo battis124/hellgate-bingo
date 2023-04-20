@@ -3,9 +3,12 @@ import Square from "./Square";
 
 function Board({ squares, setSquares }) {
   function handleClick(id) {
-    console.log(squares);
-    //  if (calculateWinner(squares) || squares[id]) {
-    //    return;
+    //  console.log(squares);
+    //   if (calculateWinner(squares) || squares[id]) {
+    //     return;
+    //   }
+    //  if (calculateWinner(squares)) {
+    //    // return;
     //  }
 
     // why is this not working ?
@@ -20,6 +23,7 @@ function Board({ squares, setSquares }) {
     });
 
     setSquares(newSquares);
+    calculateWinner(newSquares);
   }
 
   return (
@@ -27,7 +31,7 @@ function Board({ squares, setSquares }) {
       {squares.map((square) => (
         <Square
           key={square.id}
-          value={square.id}
+          value={square.value}
           isChecked={square.isChecked}
           onSquareClick={() => handleClick(square.id)}
         />
@@ -38,21 +42,39 @@ function Board({ squares, setSquares }) {
 
 function calculateWinner(squares) {
   const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
+    //horizontal
+    [0, 1, 2, 3, 4],
+    [5, 6, 7, 8, 9],
+    [10, 11, 12, 13, 14],
+    [15, 16, 17, 18, 19],
+    [20, 21, 22, 23, 24],
+
+    //vertical
+    [0, 5, 10, 15, 20],
+    [1, 6, 11, 16, 21],
+    [2, 7, 12, 17, 22],
+    [3, 8, 13, 18, 23],
+    [4, 9, 14, 19, 24],
+
+    //diagonal
+    [0, 6, 12, 18, 24],
+    [4, 8, 12, 16, 20],
   ];
+
   for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+    const [a, b, c, d, e] = lines[i];
+    if (
+      squares[a].isChecked === true &&
+      squares[b].isChecked === true &&
+      squares[c].isChecked === true &&
+      squares[d].isChecked === true &&
+      squares[e].isChecked === true
+    ) {
+      console.log("win!");
+      return true;
     }
   }
-  return null;
+
+  return false;
 }
 export default Board;
