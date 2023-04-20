@@ -3,6 +3,8 @@ import Square from "./Square";
 
 function Board({ squares, setSquares }) {
   function handleClick(id) {
+    if (id === 12) return; // bingo
+
     //  console.log(squares);
     //   if (calculateWinner(squares) || squares[id]) {
     //     return;

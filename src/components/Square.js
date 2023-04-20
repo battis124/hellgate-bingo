@@ -3,8 +3,14 @@ function Square({ value, isChecked, onSquareClick }) {
     <button
       onClick={onSquareClick}
       className={` 
-      ${isChecked ? "bg-green-500  hover:bg-green-400  " : ""} 
-      h-36 whitespace-pre-line rounded-lg bg-slate-300 px-2 font-semibold text-slate-950 transition hover:bg-slate-500  md:text-base xl:text-lg`}
+      h-36 whitespace-pre-line rounded-lg  px-2 font-semibold  transition   md:text-base xl:text-lg
+      ${
+        isChecked
+          ? "bg-green-500  text-slate-950 hover:bg-green-400 "
+          : "bg-slate-300 text-slate-950 hover:bg-slate-400"
+      } 
+
+      `}
     >
       {value}
     </button>

@@ -11,11 +11,18 @@ function App() {
       isChecked: false,
     }))
   );
+
   function handleResetGameClick() {
     console.log("losu losu losu");
     let wordsBank = [...wordsList];
 
     const newSquares = squares.map((square) => {
+      if (square.id === 12)
+        return {
+          ...square,
+          isChecked: true,
+          value: '(bingo)\n"Quazars jest za dobry"',
+        };
       const index = Math.floor(Math.random() * wordsBank.length);
       const word = wordsBank[index];
       wordsBank.splice(index, 1);
@@ -24,10 +31,11 @@ function App() {
 
     setSquares(newSquares);
   }
+
   return (
     <>
       <div className="container mx-auto my-auto px-4 py-4">
-        <div className="w-100 rounded-lg bg-slate-300 p-10  text-center text-2xl font-bold text-slate-950">
+        <div className="w-100 rounded-lg  bg-slate-300 p-10 text-center text-2xl font-bold text-slate-950">
           HG Bingo!
         </div>
       </div>
