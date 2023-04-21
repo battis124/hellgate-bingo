@@ -8,8 +8,21 @@ function playWinSound() {
   audio.play();
 }
 
-function Board({ squares, setSquares }) {
+function Board({ squares, setSquares, gameStatus, setGameStatus }) {
+  function setWinningSquares(lines) {
+    console.log(lines);
+    const newSquares = squares.map((square) => {
+      if (lines.includes(square.id)) {
+        return { ...square, isWinningBox: true };
+      }
+      return square;
+    });
+    setSquares(newSquares);
+    setGameStatus(false);
+  }
+
   function handleClick(id) {
+    if (!gameStatus) return;
     if (id === 12) return; // bingo
 
     //  console.log(squares);
@@ -32,7 +45,8 @@ function Board({ squares, setSquares }) {
     });
 
     setSquares(newSquares);
-    calculateWinner(newSquares);
+    var [isWin, winningLines] = calculateWinner(newSquares);
+    if (isWin) setWinningSquares(winningLines);
   }
 
   return (
@@ -42,6 +56,7 @@ function Board({ squares, setSquares }) {
           key={square.id}
           value={square.value}
           isChecked={square.isChecked}
+          isWinningBox={square.isWinningBox}
           onSquareClick={() => handleClick(square.id)}
         />
       ))}
@@ -81,10 +96,11 @@ function calculateWinner(squares) {
     ) {
       playWinSound();
       console.log("win!");
-      return true;
+
+      return [true, lines[i]];
     }
   }
 
-  return false;
+  return [false, false];
 }
 export default Board;

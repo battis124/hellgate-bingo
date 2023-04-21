@@ -1,13 +1,19 @@
-function Square({ value, isChecked, onSquareClick }) {
+function Square({ value, isChecked, onSquareClick, isWinningBox }) {
   return (
     <button
       onClick={onSquareClick}
       className={` 
-      h-36 whitespace-pre-line rounded-lg  px-2 font-semibold  transition   md:text-base xl:text-lg
+       h-24 whitespace-pre-line rounded-lg px-2 text-sm font-semibold transition md:h-32 md:text-base lg:h-36 xl:text-lg
+       ${isWinningBox && "bg-win"} 
+       ${
+         isChecked &&
+         !isWinningBox &&
+         "bg-blue-500 text-slate-200 hover:bg-blue-400 "
+       } 
       ${
-        isChecked
-          ? "bg-green-500  text-slate-950 hover:bg-green-400 "
-          : "bg-slate-300 text-slate-950 hover:bg-slate-400"
+        !isChecked &&
+        !isWinningBox &&
+        "bg-slate-300 text-slate-950 hover:bg-slate-400"
       } 
 
       `}

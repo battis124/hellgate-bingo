@@ -7,7 +7,7 @@ import soundFile2 from "./resources/losu-losu.mp3";
 
 const audio = [new Audio(soundFile1), new Audio(soundFile2)];
 audio.map((sound) => {
-  sound.volume = 0.2;
+  return (sound.volume = 0.2);
 });
 
 function playRandomizationSound() {
@@ -19,15 +19,18 @@ function playRandomizationSound() {
 }
 
 function App() {
+  const [gameStatus, setGameStatus] = useState(false);
   const [squares, setSquares] = useState(
     Array.from({ length: 25 }, (_, i) => ({
       id: i,
       value: `${i + 1}`,
       isChecked: false,
+      isWinningBox: false,
     }))
   );
 
   function handleResetGameClick() {
+    setGameStatus(true);
     console.log("losu losu losu");
     playRandomizationSound();
     let wordsBank = [...wordsList];
@@ -37,12 +40,13 @@ function App() {
         return {
           ...square,
           isChecked: true,
+          isWinningBox: false,
           value: '(bingo)\n"Quazars jest za dobry"',
         };
       const index = Math.floor(Math.random() * wordsBank.length);
       const word = wordsBank[index];
       wordsBank.splice(index, 1);
-      return { ...square, isChecked: false, value: word };
+      return { ...square, isChecked: false, isWinningBox: false, value: word };
     });
 
     setSquares(newSquares);
@@ -55,7 +59,12 @@ function App() {
           HG Bingo!
         </div>
       </div>
-      <Board squares={squares} setSquares={setSquares} />
+      <Board
+        squares={squares}
+        setSquares={setSquares}
+        gameStatus={gameStatus}
+        setGameStatus={setGameStatus}
+      />
       <div className="container mx-auto my-auto px-4 py-4 text-center">
         <button
           onClick={handleResetGameClick}
