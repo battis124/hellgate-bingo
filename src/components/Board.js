@@ -51,7 +51,7 @@ function Board({ squares, setSquares, gameStatus, setGameStatus }) {
 
   return (
     <div className="flex md:grow">
-      <div className="container mx-auto my-auto grid h-full max-h-[40rem] auto-rows-fr grid-cols-5 gap-1 px-1 pt-4 sm:gap-2 md:max-h-[50rem] md:gap-3 md:px-4 lg:gap-4 xl:max-h-[55rem]">
+      <div className="container mx-auto my-auto grid h-full max-h-[40rem] auto-rows-fr grid-cols-5 gap-1 px-1 py-6 sm:gap-2 md:max-h-[50rem] md:gap-3 md:px-4 lg:gap-4 xl:max-h-[55rem]">
         {squares.map((square) => (
           <Square
             key={square.id}
