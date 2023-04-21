@@ -50,7 +50,7 @@ function Board({ squares, setSquares, gameStatus, setGameStatus }) {
   }
 
   return (
-    <div className="container mx-auto my-auto grid grid-cols-5 gap-4 px-4 py-4">
+    <div className="container mx-auto my-auto grid grid-cols-5 gap-1 px-1 py-4 sm:gap-2 md:gap-3 md:px-4 lg:gap-4">
       {squares.map((square) => (
         <Square
           key={square.id}

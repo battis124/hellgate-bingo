@@ -23,7 +23,7 @@ export const wordsList = [
   "Jak coś jest stream",
   "Jaka to była wyspa?",
   "Kajdany infamy",
-  "Krecik robi samobója\n/\n Nie działają klawisze",
+  "Krecik samobój\n/\n Nie działają klawisze",
   "Lagi miałem",
   "Lawa",
   "Linka na Heal",

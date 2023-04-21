@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import Board from "./components/Board";
 import { wordsList } from "./resources/wordsList";
 import soundFile1 from "./resources/trudne-wylosowało.mp3";
@@ -54,8 +53,8 @@ function App() {
 
   return (
     <>
-      <div className="container mx-auto my-auto px-4 py-4">
-        <div className="w-100 rounded-lg  bg-slate-300 p-10 text-center text-2xl font-bold text-slate-950">
+      <div className="container mx-auto my-auto px-1 py-4 md:px-4">
+        <div className="w-100 rounded bg-slate-300  p-6 text-center font-bold text-slate-950  sm:rounded-md sm:text-lg md:p-10 lg:text-2xl">
           HG Bingo!
         </div>
       </div>
