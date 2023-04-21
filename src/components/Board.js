@@ -1,5 +1,12 @@
 import React from "react";
 import Square from "./Square";
+import winSound from "../resources/victory.mp3";
+const audio = new Audio(winSound);
+audio.volume = 0.3;
+
+function playWinSound() {
+  audio.play();
+}
 
 function Board({ squares, setSquares }) {
   function handleClick(id) {
@@ -72,6 +79,7 @@ function calculateWinner(squares) {
       squares[d].isChecked === true &&
       squares[e].isChecked === true
     ) {
+      playWinSound();
       console.log("win!");
       return true;
     }

@@ -2,6 +2,21 @@ import { useState } from "react";
 import "./App.css";
 import Board from "./components/Board";
 import { wordsList } from "./resources/wordsList";
+import soundFile1 from "./resources/trudne-wylosowało.mp3";
+import soundFile2 from "./resources/losu-losu.mp3";
+
+const audio = [new Audio(soundFile1), new Audio(soundFile2)];
+audio.map((sound) => {
+  sound.volume = 0.2;
+});
+
+function playRandomizationSound() {
+  var maximum = 1;
+  var minimum = 0;
+  var randomnumber =
+    Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+  audio[randomnumber].play();
+}
 
 function App() {
   const [squares, setSquares] = useState(
@@ -14,6 +29,7 @@ function App() {
 
   function handleResetGameClick() {
     console.log("losu losu losu");
+    playRandomizationSound();
     let wordsBank = [...wordsList];
 
     const newSquares = squares.map((square) => {
