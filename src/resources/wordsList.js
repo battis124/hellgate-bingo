@@ -7,6 +7,7 @@ export const wordsList = [
   "Blink/dps w ścianę",
   "Bóg Heavy mace przeciwnik",
   "Bunto ginie pierwszy",
+  "Dawajcie last OC",
   "Dendro załamka",
   "DPS bez mikro",
   "DPS w arkana",
