@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/hellgate-bingo/static/css/main.b9c56e7a.css",
-    "main.js": "/hellgate-bingo/static/js/main.b018655c.js",
+    "main.css": "/hellgate-bingo/static/css/main.2ed18fa1.css",
+    "main.js": "/hellgate-bingo/static/js/main.46202c80.js",
     "static/js/787.09958291.chunk.js": "/hellgate-bingo/static/js/787.09958291.chunk.js",
     "static/media/victory.mp3": "/hellgate-bingo/static/media/victory.22d68c632662457fb38a.mp3",
     "static/media/trudne-wylosowało.mp3": "/hellgate-bingo/static/media/trudne-wylosowało.0b129b35bf7937f919c4.mp3",
     "static/media/losu-losu.mp3": "/hellgate-bingo/static/media/losu-losu.9f6e60e56cc14570a325.mp3",
     "index.html": "/hellgate-bingo/index.html",
-    "main.b9c56e7a.css.map": "/hellgate-bingo/static/css/main.b9c56e7a.css.map",
-    "main.b018655c.js.map": "/hellgate-bingo/static/js/main.b018655c.js.map",
+    "main.2ed18fa1.css.map": "/hellgate-bingo/static/css/main.2ed18fa1.css.map",
+    "main.46202c80.js.map": "/hellgate-bingo/static/js/main.46202c80.js.map",
     "787.09958291.chunk.js.map": "/hellgate-bingo/static/js/787.09958291.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b9c56e7a.css",
-    "static/js/main.b018655c.js"
+    "static/css/main.2ed18fa1.css",
+    "static/js/main.46202c80.js"
   ]
 }
