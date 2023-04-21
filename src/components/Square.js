@@ -3,7 +3,7 @@ function Square({ value, isChecked, onSquareClick, isWinningBox }) {
     <button
       onClick={onSquareClick}
       className={` 
-       h-24 whitespace-pre-line rounded-sm px-2 text-xs font-semibold transition sm:rounded-md sm:text-sm md:h-28  md:text-base lg:h-32 xl:h-36 xl:text-lg
+       min-h-[6rem] whitespace-pre-line rounded-sm px-2 text-xs font-semibold transition sm:rounded-md sm:text-sm md:h-full md:text-base 2xl:text-lg
        ${isWinningBox && "bg-win"} 
        ${
          isChecked &&

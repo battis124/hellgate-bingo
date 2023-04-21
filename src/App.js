@@ -52,9 +52,9 @@ function App() {
   }
 
   return (
-    <>
+    <div className="flex h-screen columns-1 flex-col">
       <div className="container mx-auto my-auto px-1 py-4 md:px-4">
-        <div className="w-100 rounded bg-slate-300  p-6 text-center font-bold text-slate-950  sm:rounded-md sm:text-lg md:p-10 lg:text-2xl">
+        <div className="rounded bg-slate-300  p-6 text-center font-bold text-slate-950  sm:rounded-md sm:text-lg md:p-10 lg:text-2xl">
           HG Bingo!
         </div>
       </div>
@@ -64,15 +64,15 @@ function App() {
         gameStatus={gameStatus}
         setGameStatus={setGameStatus}
       />
-      <div className="container mx-auto my-auto px-4 py-4 text-center">
+      <div className="container mx-auto my-auto px-4 py-8 text-center">
         <button
           onClick={handleResetGameClick}
-          className=" rounded-full bg-blue-600 px-16 py-4 font-bold text-white transition hover:bg-blue-500"
+          className="rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
         >
           Losuj !
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
