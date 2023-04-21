@@ -1,3 +1,3 @@
 # Kiedy psycha siada, zostaje już tylko hellgate bingo...
 
-### [https://github.com/battis124/hellgate-bingo/](https://github.com/battis124/hellgate-bingo/).
+### [https://battis124.github.io/hellgate-bingo/](https://battis124.github.io/hellgate-bingo/)
