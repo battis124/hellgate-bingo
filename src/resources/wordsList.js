@@ -29,7 +29,7 @@ export const wordsList = [
   "Lawa",
   "Linka na Heal",
   "Mapa na broken fell",
-  "Mele DPS się boi",
+  "Melee DPS się boi",
   "Nie da się zginąć",
   "Nie dało się",
   "Nie ma DPS",
@@ -43,7 +43,6 @@ export const wordsList = [
   "Spal ktoś mapę\n(cisza...)",
   "Stack 5+",
   "Szukamy jenego gracza",
-  "Teraz na pewno bedzie złota",
   "Turysta w PT",
   "Udźwigu nie mam",
   "W kolejnym gate na pewno jest przeciwnik",
@@ -56,4 +55,5 @@ export const wordsList = [
   "Żarty o Rzymianach",
   "Zbugowana gra",
   "Zmieniamy compa",
+  "Nietoperze za silne",
 ];

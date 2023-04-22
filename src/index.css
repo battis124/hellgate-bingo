@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 
-
 @keyframes pulse {
 
    0%,
@@ -18,4 +17,11 @@
 
 .bg-win {
    animation: pulse 2s ease-in-out infinite;
+}
+
+
+@layer components {
+   .Board.game-status-start button:nth-last-of-type(13) {
+      @apply bg-slate-700 border-dashed border-[2px] md:border-[5px] border-slate-500;
+   }
 }

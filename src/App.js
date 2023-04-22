@@ -40,7 +40,7 @@ function App() {
           ...square,
           isChecked: true,
           isWinningBox: false,
-          value: '(bingo)\n"Quazars jest za dobry"',
+          value: "(BINGO)\nQuazars nie do pokonania",
         };
       const index = Math.floor(Math.random() * wordsBank.length);
       const word = wordsBank[index];
@@ -52,27 +52,32 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen columns-1 flex-col">
-      {/* <div className="container mx-auto my-auto px-1 py-4 md:px-4">
+    <>
+      <div className="flex h-screen columns-1 flex-col">
+        {/* <div className="container mx-auto my-auto px-1 py-4 md:px-4">
         <div className="rounded bg-slate-300  p-6 text-center font-bold text-slate-950  sm:rounded-md sm:text-lg md:p-10 lg:text-2xl">
           HG Bingo!
         </div>
       </div> */}
-      <Board
-        squares={squares}
-        setSquares={setSquares}
-        gameStatus={gameStatus}
-        setGameStatus={setGameStatus}
-      />
-      <div className="container mx-auto py-8 text-center md:h-1/5">
-        <button
-          onClick={handleResetGameClick}
-          className="rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
-        >
-          Losuj !
-        </button>
+        <Board
+          squares={squares}
+          setSquares={setSquares}
+          gameStatus={gameStatus}
+          setGameStatus={setGameStatus}
+        />
+        <div className="container mx-auto py-8 text-center md:h-1/5">
+          <button
+            onClick={handleResetGameClick}
+            className="rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
+          >
+            Losuj !
+          </button>
+        </div>
       </div>
-    </div>
+      <div className="p-r-4 p-b-4 absolute bottom-2 right-2 block text-sm text-slate-500">
+        ver:22.04.2023 | hasła: {wordsList.length}{" "}
+      </div>
+    </>
   );
 }
 
