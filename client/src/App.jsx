@@ -8,6 +8,7 @@ import soundFile2 from "./resources/losu-losu.mp3";
 import { ShareIcon } from "./components/icons/ShareIcon";
 import { RollIcon } from "./components/icons/RollIcon";
 import { LeaveIcon } from "./components/icons/LeaveIcon";
+import { CopyIcon } from "./components/icons/CopyIcon";
 
 const audio = [new Audio(soundFile1), new Audio(soundFile2)];
 audio.map((sound) => {
@@ -26,6 +27,9 @@ function App() {
   const [gameStatus, setGameStatus] = useState(false);
   const [hasBeenInvited, setHasBeenInvited] = useState(false);
   const [userID, setUserID] = useState("");
+  const [pusherAPI, setPusherAPI] = useState(null);
+  const [roomLink, setRoomLink] = useState("");
+  const [linkCopiedNotification, setLinkCopiedNotification] = useState(false);
 
   const [onlineGame, setonlineGame] = useState({
     status: "OFFLINE",
@@ -49,7 +53,7 @@ function App() {
     const roomID = urlParams.get("roomID");
 
     //clear url parameters
-    // window.history.replaceState({}, document.title, "/");
+
     console.log("isInviteLink: ", isInviteLink, "roomID: ", roomID);
     if (isInviteLink && roomID) {
       userJoinedOnlineGame(isInviteLink, roomID);
@@ -61,12 +65,14 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("use invoked");
+    const pusher = initPusher();
     if (onlineGame.status === "ONLINE") {
-      var pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
-        cluster: "eu",
-        encrypted: true,
-      });
-
+      setRoomLink(
+        window.location.origin +
+          "?isInviteLink=true&roomID=" +
+          onlineGame.roomID
+      );
       const channel = pusher.subscribe(onlineGame.roomID);
       channel.bind("game-updated", (data) => {
         console.log("remote data recived:", data);
@@ -75,15 +81,23 @@ function App() {
 
         setSquares(data.squares);
       });
-
-      return () => {
-        // this needs to be called on button quit
-        pusher.unsubscribe(onlineGame.roomID);
-      };
     }
+    return () => {
+      console.log("unsubscribing from pusher", onlineGame.roomID);
+      pusher.unsubscribe(onlineGame.roomID);
+    };
   }, [onlineGame]);
 
   function initGameSettings() {}
+  function initPusher() {
+    if (pusherAPI !== null) return pusherAPI;
+    var pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+      cluster: "eu",
+      encrypted: true,
+    });
+    setPusherAPI(pusher);
+    return pusher;
+  }
 
   function userJoinedOnlineGame(isInviteLink, roomID) {
     console.log("isInviteLink: ", isInviteLink, "roomID: ", roomID);
@@ -164,6 +178,7 @@ function App() {
   }
 
   function handleExitGame() {
+    window.history.replaceState({}, document.title, "/");
     console.log("exit game");
     setonlineGame({
       status: "OFFLINE",
@@ -181,6 +196,7 @@ function App() {
     const userID = "user-" + Math.random().toString(36).substr(2, 25);
     const roomID = "room-" + Math.random().toString(36).substr(2, 25);
     setUserID(userID);
+
     setonlineGame({
       status: "ONLINE",
       roomID: roomID,
@@ -207,7 +223,39 @@ function App() {
           setGameStatus={setGameStatus}
           sendUpdatedSquaresToServer={sendUpdatedSquaresToServer}
         />
-        <div className="container mx-auto  py-8 text-center md:h-1/5">
+        <div className="container mx-auto  py-3 text-center md:h-1/5">
+          {onlineGame.status === "ONLINE" && (
+            <>
+              <div className="relative mb-5">
+                <button
+                  onClick={() => {
+                    setLinkCopiedNotification(true);
+                    setTimeout(() => {
+                      setLinkCopiedNotification(false);
+                    }, 1500);
+                    navigator.clipboard.writeText(roomLink);
+                  }}
+                  className=" center w-100 mx-auto block rounded-lg bg-slate-300  text-slate-900 underline"
+                  href={roomLink}
+                >
+                  <span className=" px-4 py-2">{roomLink}</span>
+
+                  <span className="inline-flex items-center rounded-r-md bg-blue-600 p-3 text-slate-100">
+                    Copy <CopyIcon className="inline-block pl-1" />
+                  </span>
+                </button>
+                <div
+                  className={
+                    (linkCopiedNotification ? " opacity-100" : " opacity-0") +
+                    " absolute left-[50%] right-[50%] top-[50%] z-0 mx-auto mt-4 w-[300px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-green-500 p-2 text-white transition duration-300"
+                  }
+                >
+                  Link copied to clipboard!
+                </div>
+              </div>
+            </>
+          )}
+
           {hasBeenInvited !== true && (
             <button
               onClick={handleResetGameClick}
@@ -234,35 +282,17 @@ function App() {
               >
                 Zakończ <LeaveIcon className="inline-block pl-2" />
               </button>
-              <div className="pt-3">
-                invite link :{" "}
-                <a
-                  className="center w-100 underline"
-                  href={
-                    window.location.origin +
-                    "?isInviteLink=true&roomID=" +
-                    onlineGame.roomID
-                  }
-                >
-                  {window.location.origin}?isInviteLink=true&roomID=
-                  {onlineGame.roomID}
-                </a>
-              </div>
             </>
           )}
         </div>
       </div>
 
-      {onlineGame.status === "ONLINE" && (
-        <div className="p-r-4 p-b-4 absolute bottom-2 left-2 block text-sm text-slate-500">
-          userid: {userID} | room: {onlineGame.roomID}
-        </div>
-      )}
+      {/* <div className="p-r-4 p-b-4 absolute bottom-2 left-2 block text-sm text-slate-500">
+        userid: {userID} | room: {onlineGame.roomID} | {onlineGame.status}
+      </div> */}
+
       <div className="p-r-4 p-b-4 absolute bottom-2 right-2 block text-sm text-slate-500">
-        ver:22.04.2023 | hasła: {wordsList.length}{" "}
-      </div>
-      <div className="p-r-4 p-b-4 absolute left-[50%] right-[50%] block w-[500px] text-sm text-slate-500">
-        game status {gameStatus ? "true" : "false"}
+        ver:04.06.2023 | hasła: {wordsList.length}{" "}
       </div>
     </>
   );
