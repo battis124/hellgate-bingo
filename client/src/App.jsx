@@ -292,7 +292,7 @@ function App() {
       </div> */}
 
       <div className="p-r-4 p-b-4 absolute bottom-2 right-2 block text-sm text-slate-500">
-        ver:04.06.2023 | hasła: {wordsList.length}{" "}
+        04.06.2023 | hasła: {wordsList.length}{" "}
       </div>
     </>
   );
