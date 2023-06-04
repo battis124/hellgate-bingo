@@ -5,6 +5,7 @@ import Board from "./components/Board";
 import { wordsList } from "./resources/wordsList";
 import soundFile1 from "./resources/trudne-wylosowało.mp3";
 import soundFile2 from "./resources/losu-losu.mp3";
+import { ShareIcon } from "./components/icons/ShareIcon";
 
 const audio = [new Audio(soundFile1), new Audio(soundFile2)];
 audio.map((sound) => {
@@ -51,7 +52,7 @@ function App() {
       channel.bind("my-event", (data) => {
         console.log(data);
       });
-      channel.trigger("client-my-event", { message: "Hello, Pusher!" });
+      // channel.trigger("client-my-event", { message: "Hello, Pusher!" });
       return () => {
         pusher.unsubscribe(onlineGame.roomId);
       };
@@ -110,19 +111,22 @@ function App() {
           gameStatus={gameStatus}
           setGameStatus={setGameStatus}
         />
-        <div className="container mx-auto py-8 text-center md:h-1/5">
+        <div className="container mx-auto  py-8 text-center md:h-1/5">
           <button
             onClick={handleResetGameClick}
-            className="rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
+            className="mx-2 rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
           >
             Losuj !
           </button>
           {onlineGame.status === "OFFLINE" && (
             <button
               onClick={handleStartOnlineSession}
-              className="rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
+              className="mx-2 inline-flex rounded-full bg-green-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-green-500 md:text-base"
             >
-              Zaproś do gry!
+              Zaproś do gry!{" "}
+              <div className="inline-block pl-2">
+                <ShareIcon />
+              </div>
             </button>
           )}
           {onlineGame.status === "ONLINE" && (

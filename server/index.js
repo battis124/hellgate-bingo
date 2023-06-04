@@ -8,7 +8,7 @@ require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
 const server_port = process.env.SERVER_PORT || 3000;
 const server_ip = process.env.SERVER_IP || "127.0.0.1";
 
-let channels = ["my-channel"];
+let channels = [];
 
 const app = express();
 app.use(cors());
@@ -22,6 +22,22 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
+app.post("/create-game-room", (req, res) => {
+  const roomOwner = req.body.roomOwner;
+  const roomId = req.body.roomId;
+  const squares = req.body.squares;
+
+  console.log("roomOwner: " + roomOwner, "| roomId: " + roomId);
+  // console.log(req.body);
+
+  channels[roomId] = {
+    roomOwner: roomOwner,
+    gameData: squares,
+  };
+
+  res.send("ok");
+});
+
 app.listen(server_port, () => {
   console.log(`Example app listening at: http://${server_ip}:${server_port}`);
 });
@@ -32,26 +48,4 @@ pusher.trigger("my-channel", "my-event", {
 
 app.get("/create-room", (req, res) => {
   console.log("uesr requested to create room");
-  (async () => {
-    const attributes = "subscription_count,user_count";
-    const res = await pusher
-      .trigger(
-        channels,
-        "my-event",
-        {
-          message: "hello world",
-        },
-        {
-          info: attributes,
-        }
-      )
-      .catch((err) => {
-        console.log(err);
-      });
-
-    if (res.status === 200) {
-      const body = await res.json();
-      const channelsInfo = body.channels;
-    }
-  })();
 });
