@@ -6,6 +6,8 @@ import { wordsList } from "./resources/wordsList";
 import soundFile1 from "./resources/trudne-wylosowało.mp3";
 import soundFile2 from "./resources/losu-losu.mp3";
 import { ShareIcon } from "./components/icons/ShareIcon";
+import { RollIcon } from "./components/icons/RollIcon";
+import { LeaveIcon } from "./components/icons/LeaveIcon";
 
 const audio = [new Audio(soundFile1), new Audio(soundFile2)];
 audio.map((sound) => {
@@ -22,12 +24,14 @@ function playRandomizationSound() {
 
 function App() {
   const [gameStatus, setGameStatus] = useState(false);
+  const [hasBeenInvited, setHasBeenInvited] = useState(false);
+  const [userID, setUserID] = useState("");
+
   const [onlineGame, setonlineGame] = useState({
     status: "OFFLINE",
-    roomId: undefined,
+    roomID: undefined,
     roomOwner: undefined,
   });
-  const [userID, setUserID] = useState("");
 
   const [squares, setSquares] = useState(
     Array.from({ length: 25 }, (_, i) => ({
@@ -39,25 +43,80 @@ function App() {
   );
 
   useEffect(() => {
+    //check if any parameter in url
+    const urlParams = new URLSearchParams(window.location.search);
+    const isInviteLink = urlParams.get("isInviteLink");
+    const roomID = urlParams.get("roomID");
+
+    //clear url parameters
+    // window.history.replaceState({}, document.title, "/");
+    console.log("isInviteLink: ", isInviteLink, "roomID: ", roomID);
+    if (isInviteLink && roomID) {
+      userJoinedOnlineGame(isInviteLink, roomID);
+    }
+
+    return () => {
+      //cleanup
+    };
+  }, []);
+
+  useEffect(() => {
     if (onlineGame.status === "ONLINE") {
       var pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
         cluster: "eu",
         encrypted: true,
-        // userAuthentication: {
-        //   endpoint: process.env.REACT_APP_SERVER_URL + "/pusher/user-auth",
-        // },
       });
 
-      const channel = pusher.subscribe(onlineGame.roomId);
-      channel.bind("my-event", (data) => {
-        console.log(data);
+      const channel = pusher.subscribe(onlineGame.roomID);
+      channel.bind("game-updated", (data) => {
+        console.log("remote data recived:", data);
+        if (data.changedByUserID === userID) return;
+        if (data.resetGame === true) setGameStatus(true);
+
+        setSquares(data.squares);
       });
-      // channel.trigger("client-my-event", { message: "Hello, Pusher!" });
+
       return () => {
-        pusher.unsubscribe(onlineGame.roomId);
+        // this needs to be called on button quit
+        pusher.unsubscribe(onlineGame.roomID);
       };
     }
   }, [onlineGame]);
+
+  function initGameSettings() {}
+
+  function userJoinedOnlineGame(isInviteLink, roomID) {
+    console.log("isInviteLink: ", isInviteLink, "roomID: ", roomID);
+    const userID = "user-" + Math.random().toString(36).substr(2, 25);
+    setHasBeenInvited(true);
+    setGameStatus(true);
+    setUserID(userID);
+
+    axios
+      .get(
+        `${process.env.REACT_APP_SERVER_URL}/get-game-room?roomID=${roomID}&userID=${userID}`
+      )
+      .then(function (response) {
+        console.log(response);
+        if (response.data.error) {
+          console.log("no room");
+          // handleResetGameClick();
+          setonlineGame({
+            status: "OFFLINE",
+            roomID: undefined,
+            roomOwner: undefined,
+          });
+          setHasBeenInvited(false);
+          return;
+        }
+        setonlineGame({
+          status: "ONLINE",
+          roomID: roomID,
+          roomOwner: response.data.roomOwner,
+        });
+        setSquares(response.data.squares);
+      });
+  }
 
   function handleResetGameClick() {
     setGameStatus(true);
@@ -80,20 +139,56 @@ function App() {
     });
 
     setSquares(newSquares);
+    sendUpdatedSquaresToServer(newSquares, true);
   }
 
+  function sendUpdatedSquaresToServer(newSquares, resetGame = false) {
+    // console.log("sending data to serv");
+    if (onlineGame.status === "ONLINE") {
+      axios
+        .post(process.env.REACT_APP_SERVER_URL + "/update-game", {
+          roomOwner: onlineGame.roomOwner,
+          changedByUserID: userID,
+          roomID: onlineGame.roomID,
+          squares: newSquares,
+          resetGame: resetGame,
+        })
+        .catch((error) => {
+          setonlineGame({
+            status: "OFFLINE",
+            roomID: undefined,
+            roomOwner: undefined,
+          });
+        });
+    }
+  }
+
+  function handleExitGame() {
+    console.log("exit game");
+    setonlineGame({
+      status: "OFFLINE",
+      roomID: undefined,
+      roomOwner: undefined,
+    });
+    setGameStatus(true);
+    setHasBeenInvited(false);
+
+    // handleResetGameClick();
+    // todo - send message to server to delete room
+    // todo - set game to 0
+  }
   function handleStartOnlineSession() {
     const userID = "user-" + Math.random().toString(36).substr(2, 25);
     const roomID = "room-" + Math.random().toString(36).substr(2, 25);
     setUserID(userID);
     setonlineGame({
       status: "ONLINE",
-      roomId: roomID,
+      roomID: roomID,
     });
     axios
       .post(process.env.REACT_APP_SERVER_URL + "/create-game-room", {
         roomOwner: userID,
-        roomId: roomID,
+        roomID: roomID,
         squares: squares,
       })
       .then(function (response) {
@@ -110,42 +205,64 @@ function App() {
           setSquares={setSquares}
           gameStatus={gameStatus}
           setGameStatus={setGameStatus}
+          sendUpdatedSquaresToServer={sendUpdatedSquaresToServer}
         />
         <div className="container mx-auto  py-8 text-center md:h-1/5">
-          <button
-            onClick={handleResetGameClick}
-            className="mx-2 rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
-          >
-            Losuj !
-          </button>
+          {hasBeenInvited !== true && (
+            <button
+              onClick={handleResetGameClick}
+              className="mx-2 inline-flex rounded-full bg-blue-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-blue-500 md:text-base"
+            >
+              Losuj <RollIcon className="inline-block pl-2" />
+            </button>
+          )}
+
           {onlineGame.status === "OFFLINE" && (
             <button
               onClick={handleStartOnlineSession}
               className="mx-2 inline-flex rounded-full bg-green-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-green-500 md:text-base"
             >
-              Zaproś do gry!{" "}
-              <div className="inline-block pl-2">
-                <ShareIcon />
-              </div>
+              Zaproś do gry <ShareIcon className="inline-block pl-2" />
             </button>
           )}
+
           {onlineGame.status === "ONLINE" && (
-            <button
-              onClick={handleStartOnlineSession}
-              className="rounded-full bg-red-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-red-500 md:text-base"
-            >
-              Zakończ
-            </button>
+            <>
+              <button
+                onClick={handleExitGame}
+                className="inline-flex rounded-full bg-red-600 px-16 py-4 text-sm font-bold text-white transition hover:bg-red-500 md:text-base"
+              >
+                Zakończ <LeaveIcon className="inline-block pl-2" />
+              </button>
+              <div className="pt-3">
+                invite link :{" "}
+                <a
+                  className="center w-100 underline"
+                  href={
+                    window.location.origin +
+                    "?isInviteLink=true&roomID=" +
+                    onlineGame.roomID
+                  }
+                >
+                  {window.location.origin}?isInviteLink=true&roomID=
+                  {onlineGame.roomID}
+                </a>
+              </div>
+            </>
           )}
         </div>
       </div>
+
       {onlineGame.status === "ONLINE" && (
         <div className="p-r-4 p-b-4 absolute bottom-2 left-2 block text-sm text-slate-500">
-          userid: {userID} | room: {onlineGame.roomId}
+          userid: {userID} | room: {onlineGame.roomID}
         </div>
       )}
       <div className="p-r-4 p-b-4 absolute bottom-2 right-2 block text-sm text-slate-500">
         ver:22.04.2023 | hasła: {wordsList.length}{" "}
+      </div>
+      <div className="p-r-4 p-b-4 absolute left-[50%] right-[50%] block w-[500px] text-sm text-slate-500">
+        game status {gameStatus ? "true" : "false"}
       </div>
     </>
   );
