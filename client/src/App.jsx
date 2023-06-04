@@ -69,7 +69,7 @@ function App() {
     const pusher = initPusher();
     if (onlineGame.status === "ONLINE") {
       setRoomLink(
-        window.location.origin +
+        process.env.REACT_APP_SERVER_URL +
           "?isInviteLink=true&roomID=" +
           onlineGame.roomID
       );
