@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Square from "./Square";
 import winSound from "../resources/victory.mp3";
 const audio = new Audio(winSound);
@@ -8,7 +8,23 @@ function playWinSound() {
   audio.play();
 }
 
-function Board({ squares, setSquares, gameStatus, setGameStatus }) {
+function Board({
+  squares,
+  setSquares,
+  gameStatus,
+  setGameStatus,
+  sendUpdatedSquaresToServer,
+}) {
+  useEffect(() => {
+    if (!gameStatus) return;
+    var [isWin, winningLines] = calculateWinner(squares);
+    if (isWin) {
+      setGameStatus(false);
+      setWinningSquares(winningLines);
+    }
+    return () => {};
+  }, [squares]);
+
   function setWinningSquares(lines) {
     console.log(lines);
     const newSquares = squares.map((square) => {
@@ -18,24 +34,11 @@ function Board({ squares, setSquares, gameStatus, setGameStatus }) {
       return square;
     });
     setSquares(newSquares);
-    setGameStatus(false);
   }
 
   function handleClick(id) {
     if (!gameStatus) return;
     if (id === 12) return; // bingo
-
-    //  console.log(squares);
-    //   if (calculateWinner(squares) || squares[id]) {
-    //     return;
-    //   }
-    //  if (calculateWinner(squares)) {
-    //    // return;
-    //  }
-
-    // why is this not working ?
-    //  let newSquares = squares;
-    //  newSquares[i].isChecked = !newSquares[i].isChecked;
 
     const newSquares = squares.map((square) => {
       if (square.id === id) {
@@ -45,8 +48,7 @@ function Board({ squares, setSquares, gameStatus, setGameStatus }) {
     });
 
     setSquares(newSquares);
-    var [isWin, winningLines] = calculateWinner(newSquares);
-    if (isWin) setWinningSquares(winningLines);
+    sendUpdatedSquaresToServer(newSquares);
   }
 
   return (
