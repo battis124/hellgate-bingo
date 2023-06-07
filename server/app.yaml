@@ -1,0 +1,12 @@
+runtime: node16
+
+instance_class: F2
+
+env_variables:
+  TEST: "test"
+
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
+    redirect_http_response_code: 301
