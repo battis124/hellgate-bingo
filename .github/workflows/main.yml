@@ -1,27 +1,27 @@
-# name: Node.js - Deploy Server
+name: Node.js - Deploy Server
 
-# on:
-#   push:
-#     branches:
+on:
+  push:
+    branches:
 #       - master
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Deploy ${{ github.event.repository.name }} using ssh
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.PRIVATE_KEY }}
-#           port: 22
-#           script: |
-#             cd /var/www/${{ github.event.repository.name }}
-#             git pull origin master
-#             git status
-#             cd server
-#             npm install --only=prod
-#             pm2 delete ${{ github.event.repository.name }}
-#             pm2 start npm --name "${{ github.event.repository.name }}" -- run start
+    steps:
+      - name: Deploy ${{ github.event.repository.name }} using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /var/www/${{ github.event.repository.name }}
+            git pull origin master
+            git status
+            cd server
+            npm install --only=prod
+            pm2 delete ${{ github.event.repository.name }}
+            pm2 start npm --name "${{ github.event.repository.name }}" -- run start
