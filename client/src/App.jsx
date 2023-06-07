@@ -226,7 +226,7 @@ function App() {
         <div className="container mx-auto  py-3 text-center md:h-1/5">
           {onlineGame.status === "ONLINE" && (
             <>
-              <div className="relative mb-5">
+              <div className="relative mb-6">
                 <button
                   onClick={() => {
                     setLinkCopiedNotification(true);
@@ -235,18 +235,23 @@ function App() {
                     }, 1500);
                     navigator.clipboard.writeText(roomLink);
                   }}
-                  className=" center w-100 mx-auto block rounded-lg bg-slate-300  text-slate-900 underline"
+                  className="center w-100 group mx-auto block rounded-lg bg-slate-300  text-slate-900 duration-300 hover:opacity-70 "
                   href={roomLink}
                 >
-                  <span className=" px-4 py-2">{roomLink}</span>
+                  <span className=" py-2 pl-4 ">ID sesji :</span>
+                  <span className="py-2 pl-2 pr-4 underline">
+                    {onlineGame.roomID}
+                  </span>
 
-                  <span className="inline-flex items-center rounded-r-md bg-blue-600 p-3 text-slate-100">
-                    Copy <CopyIcon className="inline-block pl-1" />
+                  <span className="inline-flex items-center rounded-r-md bg-green-600 p-3 text-slate-100 duration-300 ">
+                    Copy Link <CopyIcon className="inline-block pl-1" />
                   </span>
                 </button>
                 <div
                   className={
-                    (linkCopiedNotification ? " opacity-100" : " opacity-0") +
+                    (linkCopiedNotification
+                      ? " z-10 opacity-100"
+                      : " -z-10 opacity-0") +
                     " absolute left-[50%] right-[50%] top-[50%] z-0 mx-auto mt-4 w-[300px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-green-500 p-2 text-white transition duration-300"
                   }
                 >
