@@ -3,7 +3,7 @@ const Pusher = require("pusher");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-// require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
+require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
 
 const server_port = process.env.PORT || 3003;
 const server_ip = process.env.SERVER_IP || "127.0.0.1";
