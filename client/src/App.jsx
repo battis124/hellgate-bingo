@@ -235,7 +235,7 @@ function App() {
                     }, 1500);
                     navigator.clipboard.writeText(roomLink);
                   }}
-                  className="center w-100 group mx-auto block rounded-lg bg-slate-300  text-slate-900 duration-300 hover:opacity-70 "
+                  className="center w-100 group z-10 mx-auto block rounded-lg bg-slate-300  text-slate-900 duration-300 hover:opacity-70 "
                   href={roomLink}
                 >
                   <span className=" py-2 pl-4 ">ID sesji :</span>
@@ -297,7 +297,7 @@ function App() {
       </div> */}
 
       <div className="p-r-4 p-b-4 absolute bottom-2 right-2 block text-sm text-slate-500">
-        04.06.2023 | hasła: {wordsList.length}{" "}
+        07.06.2023 | hasła: {wordsList.length}{" "}
       </div>
     </>
   );
