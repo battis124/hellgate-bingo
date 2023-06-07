@@ -235,7 +235,7 @@ function App() {
                     }, 1500);
                     navigator.clipboard.writeText(roomLink);
                   }}
-                  className="center w-100 group z-10 mx-auto block rounded-lg bg-slate-300  text-slate-900 duration-300 hover:opacity-70 "
+                  className="center w-100 group relative z-10 mx-auto block rounded-lg bg-slate-300  text-slate-900 duration-300 hover:opacity-70 "
                   href={roomLink}
                 >
                   <span className=" py-2 pl-4 ">ID sesji :</span>
