@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -37,7 +37,10 @@ jobs:
           username: ${{secrets.GOOGLE_CLOUD_VM_USERNAME}}
           script: |
             pm2 delete all
-            cd /var/app/${{ github.event.repository.name }}
+            cd /var/app/${{ github.event.repository.name }}/server
             git pull
             npm install
-            pm2 start npm --name "${{ github.event.repository.name }}" -- run start
+            # pm2 start npm --name "${{ github.event.repository.name }}" -- run start
+            gcloud app deploy /var/app/${{ github.event.repository.name }}/server/app.yaml
+            #publish to google cloud app engine
+            # gcloud app deploy /var/app/${{ github.event.repository.name }}/server/app.yaml --project ${{secrets.GOOGLE_CLOUD_PROJECT_ID}}
