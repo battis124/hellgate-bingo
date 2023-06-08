@@ -3,8 +3,7 @@ name: Node.js - Deploy Server
 on:
   push:
     branches:
-#       - master
-
+      - main #should be master
 jobs:
   build:
     runs-on: ubuntu-latest
